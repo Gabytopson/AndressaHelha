@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Para Andressa Helha</title>
+  <style>
+    body {
+      background-color: pink;
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 100px;
+      overflow: hidden;
+    }
+    h1, #botoes {
+      transition: opacity 0.5s ease;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      margin: 20px;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+    }
+    #sim {
+      background-color: #00c853;
+      color: white;
+    }
+    #nao {
+      background-color: #d50000;
+      color: white;
+      position: absolute;
+    }
+    #mensagem {
+      display: none;
+      font-size: 24px;
+      color: #4a004a;
+      margin-top: 30px;
+    }
+    #video {
+      display: none;
+      margin-top: 20px;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="pergunta">Você promete só conversar comigo? e deixar eu clonar seu celular? </h1>
+
+  <div id="botoes">
+    <button id="sim">Sim</button>
+    <button id="nao">Não</button>
+  </div>
+
+  <div id="mensagem">Obrigada, você é incrível s2 💖</div>
+
+  <div id="video">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/MAKf2F7fHCM?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <script>
+    const naoBtn = document.getElementById("nao");
+    const simBtn = document.getElementById("sim");
+    const pergunta = document.getElementById("pergunta");
+    const botoes = document.getElementById("botoes");
+    const mensagem = document.getElementById("mensagem");
+    const video = document.getElementById("video");
+
+    // Botão "Não" foge
+    naoBtn.addEventListener("mouseover", () => {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      naoBtn.style.left = `${x}px`;
+      naoBtn.style.top = `${y}px`;
+    });
+
+    // Botão "Sim"
+    simBtn.addEventListener("click", () => {
+      pergunta.style.display = "none";
+      botoes.style.display = "none";
+      mensagem.style.display = "block";
+      video.style.display = "block";
+      startConfetti();
+    });
+
+    // Confetes
+    const canvas = document.getElementById("confetti-canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const pieces = [];
+
+    function randomColor() {
+      const colors = ["#ff0", "#f0f", "#0ff", "#f00", "#0f0", "#00f"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 100; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          size: Math.random() * 10 + 5,
+          speed: Math.random() * 3 + 2,
+          color: randomColor()
+        });
+      }
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of pieces) {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+        p.y += p.speed;
+        if (p.y > canvas.height) p.y = -p.size;
+      }
+      requestAnimationFrame(drawConfetti);
+    }
+
+    function startConfetti() {
+      createConfetti();
+      drawConfetti();
+    }
+  </script>
+
+</body>
+</html>
